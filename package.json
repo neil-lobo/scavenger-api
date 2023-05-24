@@ -1,0 +1,29 @@
+{
+  "type": "module",
+  "name": "scavenger-api",
+  "version": "0.0.1",
+  "description": "API for Scavenger service",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node --esm src/index.ts",
+    "dev": "nodemon --esm src/index.ts",
+    "build": "tsc",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@typescript-eslint/eslint-plugin": "^5.59.7",
+    "@typescript-eslint/parser": "^5.59.7",
+    "eslint": "^8.41.0",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
