@@ -28,9 +28,10 @@ router.use((req, res, next) => {
     /*
         Email asserts:
             - no spaces
+            - max 256 chars
             - match regex
     */
-   if (email.search(" ") !== -1 || !emailExpr.test(email)) {
+   if (email.length > 256 || email.search(" ") !== -1 || !emailExpr.test(email)) {
        return res.status(400).json({
            ...BAD_REQUEST,
            message: "Invalid email"
@@ -40,9 +41,10 @@ router.use((req, res, next) => {
     /*
         Password asserts:
             - minimum 8 chars
+            - max 32 chars
             - match regex
     */
-    if (password.length < 8 || !passwordExpr.test(password)) {
+    if (password.length < 8 || password.length > 32 || !passwordExpr.test(password)) {
         return res.status(400).json({
             ...BAD_REQUEST,
             message: "Invalid password"
