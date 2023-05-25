@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router, json } from "express";
 import { BAD_REQUEST } from "../lib/http-status.js";
-import { routeLog } from "../lib/middleware/route-logger.js";
+import { logRoute } from "../lib/middleware/route-logger.js";
 
 const router = Router();
 const emailExpr = /^.+@mcmaster\.ca$/;
@@ -52,7 +52,7 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
     next();
 };
 
-const middleware = [routeLog, json(), validate];
+const middleware = [logRoute, json(), validate];
 
 router.post("/signup", middleware, (req: Request, res: Response) => {
     res.status(200).send();
