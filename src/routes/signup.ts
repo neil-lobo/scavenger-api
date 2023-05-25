@@ -1,4 +1,4 @@
-import { Router, json } from "express";
+import { NextFunction, Request, Response, Router, json } from "express";
 import { BAD_REQUEST } from "../lib/http-status.js";
 import { routeLog } from "../lib/middleware/route-logger.js";
 
@@ -6,9 +6,7 @@ const router = Router();
 const emailExpr = /^.+@mcmaster\.ca$/;
 const passwordExpr = /^[\w!@#$%^&*() ]+$/;
 
-router.use(json());
-router.use(routeLog);
-router.use((req, res, next) => {
+const validate = (req: Request, res: Response, next: NextFunction) => {
     const email: string = req.body.email;
     const password: string = req.body.password;
     if (!email) {
@@ -52,9 +50,11 @@ router.use((req, res, next) => {
     }
 
     next();
-});
+};
 
-router.post("/signup", (req, res) => {
+const middleware = [routeLog, json(), validate];
+
+router.post("/signup", middleware, (req: Request, res: Response) => {
     res.status(200).send();
 });
 
