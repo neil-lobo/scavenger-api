@@ -54,13 +54,13 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
             - max 256 chars
             - match regex
     */
-   if (email.length > 256 || email.search(" ") !== -1 || !emailExpr.test(email)) {
-       return res.status(400).json({
-           ...BAD_REQUEST,
-           message: "Invalid email"
+    if (email.length > 256 || email.search(" ") !== -1 || !emailExpr.test(email)) {
+        return res.status(400).json({
+            ...BAD_REQUEST,
+            message: "Invalid email"
         });
     }
-    
+
     /*
         Password asserts:
             - minimum 8 chars
