@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response, Router, json } from "express";
-import { BAD_REQUEST } from "../lib/http-status.js";
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from "../lib/http-status.js";
 import { logRoute } from "../lib/middleware/route-logger.js";
+import { db } from "../lib/db.js";
+import { randomBytes } from "crypto";
 
 const router = Router();
 const emailExpr = /^.+@mcmaster\.ca$/;
@@ -82,12 +84,38 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
         });
     }
 
+    //TODO asserts for other fields
+    // also maybe make own custom schema validator that returns HTTP response
+
     next();
 };
 
 const middleware = [logRoute, json(), validate];
 
-router.post("/signup", middleware, (req: Request, res: Response) => {
+router.post("/signup", middleware, async (req: Request, res: Response) => {
+    try {
+        await db.pool.query("INSERT INTO MAC_SH_DEV.USERS (EMAIL, PASSWORD, F_NAME, L_NAME, EMAIL_CONFIRMED, CONFIRMATION_CODE, L_NAME_INITIALIZE) VALUES (?, ?, ?, ?, ?, ?, ?)", [
+            req.body.email.toLowerCase(),
+            req.body.password,
+            req.body.name.first.toLowerCase(),
+            req.body.name.last.toLowerCase(),
+            false,
+            randomBytes(16).toString("hex"),
+            req.body.name.abbrevLast
+        ]);
+    } catch(err: any) {
+        console.log(err);
+        if (err.code === "ER_DUP_ENTRY") {
+            return res.status(400).json({
+                ...BAD_REQUEST,
+                message: "Email is already in use"
+            });
+        } else {
+            return res.status(500).json({
+                ...INTERNAL_SERVER_ERROR
+            });
+        }
+    }
     res.status(200).send();
 });
 
