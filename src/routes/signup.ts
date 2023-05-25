@@ -9,17 +9,42 @@ const passwordExpr = /^[\w!@#$%^&*() ]+$/;
 const validate = (req: Request, res: Response, next: NextFunction) => {
     const email: string = req.body.email;
     const password: string = req.body.password;
-    if (!email) {
+    const fName: string = req.body.name?.first;
+    const lName: string = req.body.name?.last;
+    const lNameAbbrev: boolean = req.body.name?.abbrevLast;
+
+    if (email === undefined) {
         return res.status(400).json({
             ...BAD_REQUEST,
             message: "Missing 'email' field"
         });
     }
 
-    if (!password) {
+    if (password === undefined) {
         return res.status(400).json({
             ...BAD_REQUEST,
             message: "Missing 'password' field"
+        });
+    }
+
+    if (fName === undefined) {
+        return res.status(400).json({
+            ...BAD_REQUEST,
+            message: "Missing 'name.first' field"
+        });
+    }
+
+    if (lName === undefined) {
+        return res.status(400).json({
+            ...BAD_REQUEST,
+            message: "Missing 'name.last' field"
+        });
+    }
+
+    if (lNameAbbrev === undefined) {
+        return res.status(400).json({
+            ...BAD_REQUEST,
+            message: "Missing 'name.abbrevLast' field"
         });
     }
 
