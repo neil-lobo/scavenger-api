@@ -93,6 +93,7 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
 const middleware = [logRoute, json(), validate];
 
 router.post("/signup", middleware, async (req: Request, res: Response) => {
+    // TODO salt & hash password
     try {
         await db.pool.query("INSERT INTO MAC_SH_DEV.USERS (EMAIL, PASSWORD, F_NAME, L_NAME, EMAIL_CONFIRMED, CONFIRMATION_CODE, L_NAME_INITIALIZE) VALUES (?, ?, ?, ?, ?, ?, ?)", [
             req.body.email.toLowerCase(),
