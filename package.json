@@ -9,7 +9,7 @@
     "dev": "nodemon --esm src/index.ts",
     "build": "tsc",
     "lint": "eslint .",
-    "lint:watch": "nodemon --exec eslint .",
+    "lint:watch": "nodemon -e ts,json --exec eslint .",
     "lint:fix": "eslint --fix ."
   },
   "keywords": [],
