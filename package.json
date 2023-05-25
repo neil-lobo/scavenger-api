@@ -12,8 +12,7 @@
     "lint:watch": "nodemon -e ts,json --exec eslint .",
     "lint:fix": "eslint --fix ."
   },
-  "keywords": [],
-  "author": "",
+  "author": "Neil Lobo",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.17",
