@@ -1,5 +1,5 @@
-import { createRequire } from 'node:module';
-import db from 'mariadb';
+import { createRequire } from "node:module";
+import db from "mariadb";
 
 const require = createRequire(import.meta.url);
 const config = require("../config.json");
@@ -9,7 +9,7 @@ class DB {
 
     constructor() {
         this.pool = db.createPool({
-            ...config.db
+            ...config.db,
         });
     }
 }

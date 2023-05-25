@@ -2,9 +2,9 @@ if (process.env.DOTENV) {
     (await import("dotenv")).config();
 }
 
-import chalk from 'chalk';
-import express from 'express';
-import { routes } from './routes/routes.js';
+import chalk from "chalk";
+import express from "express";
+import { routes } from "./routes/routes.js";
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;

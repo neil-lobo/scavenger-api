@@ -16,35 +16,35 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
     if (email === undefined) {
         return res.status(400).json({
             ...BAD_REQUEST,
-            message: "Missing 'email' field"
+            message: "Missing 'email' field",
         });
     }
 
     if (password === undefined) {
         return res.status(400).json({
             ...BAD_REQUEST,
-            message: "Missing 'password' field"
+            message: "Missing 'password' field",
         });
     }
 
     if (fName === undefined) {
         return res.status(400).json({
             ...BAD_REQUEST,
-            message: "Missing 'name.first' field"
+            message: "Missing 'name.first' field",
         });
     }
 
     if (lName === undefined) {
         return res.status(400).json({
             ...BAD_REQUEST,
-            message: "Missing 'name.last' field"
+            message: "Missing 'name.last' field",
         });
     }
 
     if (lNameAbbrev === undefined) {
         return res.status(400).json({
             ...BAD_REQUEST,
-            message: "Missing 'name.abbrevLast' field"
+            message: "Missing 'name.abbrevLast' field",
         });
     }
 
@@ -54,10 +54,14 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
             - max 256 chars
             - match regex
     */
-    if (email.length > 256 || email.search(" ") !== -1 || !emailExpr.test(email)) {
+    if (
+        email.length > 256 ||
+        email.search(" ") !== -1 ||
+        !emailExpr.test(email)
+    ) {
         return res.status(400).json({
             ...BAD_REQUEST,
-            message: "Invalid email"
+            message: "Invalid email",
         });
     }
 
@@ -67,10 +71,14 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
             - max 32 chars
             - match regex
     */
-    if (password.length < 8 || password.length > 32 || !passwordExpr.test(password)) {
+    if (
+        password.length < 8 ||
+        password.length > 32 ||
+        !passwordExpr.test(password)
+    ) {
         return res.status(400).json({
             ...BAD_REQUEST,
-            message: "Invalid password"
+            message: "Invalid password",
         });
     }
 

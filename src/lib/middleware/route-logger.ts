@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import chalk from 'chalk';
+import chalk from "chalk";
 
 export function logRoute(req: Request, res: Response, next: NextFunction) {
     let path = req.path;
