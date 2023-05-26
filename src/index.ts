@@ -12,5 +12,8 @@ const PORT = process.env.PORT ?? 3000;
 app.use(routes);
 
 app.listen(PORT, async () => {
-    console.log(chalk.red("[API]"), `Listening on ${process.env.URL ?? "http://localhost"}:${PORT}`);
+    console.log(
+        chalk.red("[API]"),
+        `Listening on ${process.env.URL ?? "http://localhost"}:${PORT}`
+    );
 });

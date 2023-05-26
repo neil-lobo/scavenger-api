@@ -98,32 +98,35 @@ router.post("/signup", middleware, async (req: Request, res: Response) => {
     const code = randomBytes(16).toString("hex");
 
     try {
-        await db.pool.query("INSERT INTO MAC_SH_DEV.USERS (EMAIL, PASSWORD, F_NAME, L_NAME, EMAIL_CONFIRMED, CONFIRMATION_CODE, L_NAME_INITIALIZE) VALUES (?, ?, ?, ?, ?, ?, ?)", [
-            req.body.email.toLowerCase(),
-            req.body.password,
-            req.body.name.first.toLowerCase(),
-            req.body.name.last.toLowerCase(),
-            false,
-            code,
-            req.body.name.abbrevLast
-        ]);
-    } catch(err: any) {
+        await db.pool.query(
+            "INSERT INTO MAC_SH_DEV.USERS (EMAIL, PASSWORD, F_NAME, L_NAME, EMAIL_CONFIRMED, CONFIRMATION_CODE, L_NAME_INITIALIZE) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [
+                req.body.email.toLowerCase(),
+                req.body.password,
+                req.body.name.first.toLowerCase(),
+                req.body.name.last.toLowerCase(),
+                false,
+                code,
+                req.body.name.abbrevLast,
+            ]
+        );
+    } catch (err: any) {
         console.log(err);
         if (err.code === "ER_DUP_ENTRY") {
             return res.status(400).json({
                 ...BAD_REQUEST,
-                message: "Email is already in use"
+                message: "Email is already in use",
             });
         } else {
             return res.status(500).json({
-                ...INTERNAL_SERVER_ERROR
+                ...INTERNAL_SERVER_ERROR,
             });
         }
     }
 
     try {
         await sendConfirmationEmail(req.body.email.toLowerCase(), code);
-    } catch(err: any) {
+    } catch (err: any) {
         console.log(err);
     }
 
