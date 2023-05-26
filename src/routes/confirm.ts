@@ -1,6 +1,6 @@
 import { Request, Response, Router, json } from "express";
 import { db } from "../lib/db.js";
-import { INTERNAL_SERVER_ERROR, NOT_FOUND} from "../lib/http-status.js";
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND} from "../lib/http-status.js";
 import * as assert from "node:assert";
 import { logRoute } from "../lib/middleware/route-logger.js";
 import { sendPostConfirmationEmail } from "../lib/mail.js";
@@ -10,7 +10,10 @@ const middlware = [logRoute, json()];
 
 router.get("/confirm", middlware, async (req: Request, res: Response) => {
     if (!req.query.code) {
-        return res.redirect("/");
+        return res.status(400).json({
+            ...BAD_REQUEST,
+            message: "missing code"
+        })
     }
 
     let data;

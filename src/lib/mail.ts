@@ -12,7 +12,7 @@ export async function sendConfirmationEmail(to: string, code: string) {
         from: config.sg.sender,
         to,
         subject: "Scavenger Account Confirmation",
-        text: `Verify account: http://localhost:3000/confirm?code=${code}\nCode: ${code}`
+        text: `Verify account: http://localhost:3000/confirm?code=${code}\nCode: ${code}` // FIXME load domain from config 
     });
 }
 
