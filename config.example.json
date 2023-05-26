@@ -4,5 +4,9 @@
         "user": "x",
         "password": "x",
         "database": "x"
+    },
+    "sg": {
+        "apiKey": "x",
+        "sender": "no-reply@x.com"
     }
 }

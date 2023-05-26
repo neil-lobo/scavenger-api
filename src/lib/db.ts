@@ -1,8 +1,5 @@
-import { createRequire } from "node:module";
 import db from "mariadb";
-
-const require = createRequire(import.meta.url);
-const config = require("../../config.json");
+import { config } from "./config.js";
 
 class DB {
     pool;

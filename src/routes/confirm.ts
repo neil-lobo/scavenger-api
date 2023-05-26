@@ -3,6 +3,7 @@ import { db } from "../lib/db.js";
 import { INTERNAL_SERVER_ERROR, NOT_FOUND} from "../lib/http-status.js";
 import * as assert from "node:assert";
 import { logRoute } from "../lib/middleware/route-logger.js";
+import { sendPostConfirmationEmail } from "../lib/mail.js";
 const router = Router();
 
 const middlware = [logRoute, json()];
@@ -32,6 +33,12 @@ router.get("/confirm", middlware, async (req: Request, res: Response) => {
     } catch(err: any) {
         console.log(err);
         return res.status(500).json(INTERNAL_SERVER_ERROR);
+    }
+
+    try {
+        await sendPostConfirmationEmail(data[0].EMAIL);
+    } catch(err: any) {
+        console.log(err);
     }
 
     res.send({

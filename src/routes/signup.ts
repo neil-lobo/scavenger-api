@@ -3,6 +3,7 @@ import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from "../lib/http-status.js";
 import { logRoute } from "../lib/middleware/route-logger.js";
 import { db } from "../lib/db.js";
 import { randomBytes } from "crypto";
+import { sendConfirmationEmail } from "../lib/mail.js";
 
 const router = Router();
 const emailExpr = /^.+@mcmaster\.ca$/;
@@ -94,6 +95,8 @@ const middleware = [logRoute, json(), validate];
 
 router.post("/signup", middleware, async (req: Request, res: Response) => {
     // TODO salt & hash password
+    const code = randomBytes(16).toString("hex");
+
     try {
         await db.pool.query("INSERT INTO MAC_SH_DEV.USERS (EMAIL, PASSWORD, F_NAME, L_NAME, EMAIL_CONFIRMED, CONFIRMATION_CODE, L_NAME_INITIALIZE) VALUES (?, ?, ?, ?, ?, ?, ?)", [
             req.body.email.toLowerCase(),
@@ -101,7 +104,7 @@ router.post("/signup", middleware, async (req: Request, res: Response) => {
             req.body.name.first.toLowerCase(),
             req.body.name.last.toLowerCase(),
             false,
-            randomBytes(16).toString("hex"),
+            code,
             req.body.name.abbrevLast
         ]);
     } catch(err: any) {
@@ -117,6 +120,13 @@ router.post("/signup", middleware, async (req: Request, res: Response) => {
             });
         }
     }
+
+    try {
+        await sendConfirmationEmail(req.body.email.toLowerCase(), code);
+    } catch(err: any) {
+        console.log(err);
+    }
+
     res.status(200).send();
 });
 
