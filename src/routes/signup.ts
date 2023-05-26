@@ -4,6 +4,7 @@ import { logRoute } from "../lib/middleware/route-logger.js";
 import { db } from "../lib/db.js";
 import { randomBytes } from "crypto";
 import { sendConfirmationEmail } from "../lib/mail.js";
+import bcrypt from "bcrypt";
 
 const router = Router();
 const emailExpr = /^.+@mcmaster\.ca$/;
@@ -94,15 +95,15 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
 const middleware = [logRoute, json(), validate];
 
 router.post("/signup", middleware, async (req: Request, res: Response) => {
-    // TODO salt & hash password
     const code = randomBytes(16).toString("hex");
+    const passwordHash = await bcrypt.hash(req.body.password, 10);
 
     try {
         await db.pool.query(
             "INSERT INTO MAC_SH_DEV.USERS (EMAIL, PASSWORD, F_NAME, L_NAME, EMAIL_CONFIRMED, CONFIRMATION_CODE, L_NAME_INITIALIZE) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [
                 req.body.email.toLowerCase(),
-                req.body.password,
+                passwordHash,
                 req.body.name.first.toLowerCase(),
                 req.body.name.last.toLowerCase(),
                 false,
