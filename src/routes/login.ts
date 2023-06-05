@@ -83,7 +83,8 @@ router.post("/login", middleware, async (req: Request, res: Response) => {
     }
     
     res.json({
-        token
+        token,
+        user
     });
 });
 
