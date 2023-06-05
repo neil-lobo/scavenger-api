@@ -7,7 +7,7 @@ import {
     UNAUTHORIZED,
 } from "../lib/http-status.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import { config } from "../lib/config.js";
 
 const router = Router();
@@ -38,7 +38,7 @@ const middleware = [json(), validate];
 router.post("/login", middleware, async (req: Request, res: Response) => {
     let user;
     let token;
-    
+
     try {
         const row = await db.pool.query(
             "SELECT ID,EMAIL,F_NAME,L_NAME,EMAIL_CONFIRMED,PASSWORD FROM MAC_SH_DEV.USERS WHERE EMAIL = ?",
@@ -54,7 +54,7 @@ router.post("/login", middleware, async (req: Request, res: Response) => {
         }
 
         user = row[0];
-        
+
         const hash = row[0].PASSWORD;
         const compare = await bcrypt.compare(req.body.password, hash);
         delete user.PASSWORD;
@@ -74,17 +74,17 @@ router.post("/login", middleware, async (req: Request, res: Response) => {
 
     // create jwt
     try {
-        token = jwt.sign(user, config.jwt.secret)
-    } catch(err: any) {
+        token = jwt.sign(user, config.jwt.secret);
+    } catch (err: any) {
         console.log(err);
         return res.status(500).json({
             ...INTERNAL_SERVER_ERROR,
-        })
+        });
     }
-    
+
     res.json({
         token,
-        user
+        user,
     });
 });
 
