@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router, json } from "express";
 import { db } from "../lib/db.js";
 import {
     BAD_REQUEST,
+    FORBIDDEN,
     INTERNAL_SERVER_ERROR,
     NOT_FOUND,
     UNAUTHORIZED,
@@ -69,6 +70,13 @@ router.post("/login", middleware, async (req: Request, res: Response) => {
         console.log(err);
         return res.status(500).json({
             ...INTERNAL_SERVER_ERROR,
+        });
+    }
+
+    if (!user.EMAIL_CONFIRMED) {
+        return res.status(403).json({
+            ...FORBIDDEN,
+            message: "Email not confirmed",
         });
     }
 

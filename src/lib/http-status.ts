@@ -8,6 +8,11 @@ export const UNAUTHORIZED = {
     error: "Unauthorized",
 };
 
+export const FORBIDDEN = {
+    status: 403,
+    error: "Forbidden",
+};
+
 export const NOT_FOUND = {
     status: 404,
     error: "Not Found",
