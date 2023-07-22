@@ -11,7 +11,8 @@
         "lint": "eslint .",
         "lint:watch": "nodemon -e ts,json --exec eslint .",
         "lint:fix": "eslint --fix .",
-        "format": "prettier . -w"
+        "format": "prettier . -w",
+        "format:full": "npm run format && npm run lint:fix"
     },
     "author": "Neil Lobo",
     "license": "ISC",
