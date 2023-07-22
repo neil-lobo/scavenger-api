@@ -7,7 +7,7 @@ export function validateBody(schema: z.ZodObject<any>) {
         try {
             schema.parse(req.body);
         } catch (err) {
-            const errors = err as ZodError;
+            const errors = (err as ZodError).issues.map(i => `\`${i.path.join(".")}\` ${i.message}`);
             return res.status(400).json({
                 ...BAD_REQUEST,
                 errors,
