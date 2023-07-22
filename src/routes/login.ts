@@ -1,7 +1,6 @@
-import { NextFunction, Request, Response, Router, json } from "express";
+import { Request, Response, Router, json } from "express";
 import { db } from "../lib/db.js";
 import {
-    BAD_REQUEST,
     FORBIDDEN,
     INTERNAL_SERVER_ERROR,
     NOT_FOUND,
@@ -11,31 +10,17 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config } from "../lib/config.js";
 import { User } from "../lib/middleware/auths.js";
+import { z } from "zod";
+import { validateBody } from "../lib/middleware/validate.js";
 
 const router = Router();
 
-const validate = (req: Request, res: Response, next: NextFunction) => {
-    const email: string = req.body.email;
-    const password: string = req.body.password;
+const bodySchema = z.object({
+    email: z.string(),
+    password: z.string(),
+});
 
-    if (email === undefined) {
-        return res.status(400).json({
-            ...BAD_REQUEST,
-            message: "Missing 'email' field",
-        });
-    }
-
-    if (password === undefined) {
-        return res.status(400).json({
-            ...BAD_REQUEST,
-            message: "Missing 'password' field",
-        });
-    }
-
-    next();
-};
-
-const middleware = [json(), validate];
+const middleware = [json(), validateBody(bodySchema)];
 
 router.post("/login", middleware, async (req: Request, res: Response) => {
     let user;
