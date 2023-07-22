@@ -1,25 +1,20 @@
 import { Request, Response, Router, json } from "express";
 import { db } from "../lib/db.js";
-import {
-    BAD_REQUEST,
-    INTERNAL_SERVER_ERROR,
-    NOT_FOUND,
-} from "../lib/http-status.js";
+import { INTERNAL_SERVER_ERROR, NOT_FOUND } from "../lib/http-status.js";
 import * as assert from "node:assert";
 import { logRoute } from "../lib/middleware/route-logger.js";
 import { sendPostConfirmationEmail } from "../lib/mail.js";
+import { z } from "zod";
+import { validateBody } from "../lib/middleware/validate.js";
 const router = Router();
 
-const middlware = [logRoute, json()];
+const bodySchema = z.object({
+    code: z.string(),
+});
+
+const middlware = [logRoute, json(), validateBody(bodySchema)];
 
 router.get("/confirm", middlware, async (req: Request, res: Response) => {
-    if (!req.query.code) {
-        return res.status(400).json({
-            ...BAD_REQUEST,
-            message: "missing code",
-        });
-    }
-
     let data;
     try {
         data = await db.pool.query(
