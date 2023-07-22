@@ -6,6 +6,7 @@ import { logRoute } from "../lib/middleware/route-logger.js";
 import { sendPostConfirmationEmail } from "../lib/mail.js";
 import { z } from "zod";
 import { validateBody } from "../lib/middleware/validate.js";
+import { logger } from "../lib/loggings.js";
 const router = Router();
 
 const bodySchema = z.object({
@@ -22,7 +23,7 @@ router.get("/confirm", middlware, async (req: Request, res: Response) => {
             [req.query.code]
         );
     } catch (err: any) {
-        console.log(err);
+        logger.error("ConfirmEmailCode", (err as Error).message);
         return res.status(500).json(INTERNAL_SERVER_ERROR);
     }
 
@@ -39,14 +40,14 @@ router.get("/confirm", middlware, async (req: Request, res: Response) => {
             [data[0].ID]
         );
     } catch (err: any) {
-        console.log(err);
+        logger.error("AcceptConfirmEmailCode", (err as Error).message);
         return res.status(500).json(INTERNAL_SERVER_ERROR);
     }
 
     try {
         await sendPostConfirmationEmail(data[0].EMAIL);
     } catch (err: any) {
-        console.log(err);
+        logger.error("SendPostConfirmEmail", (err as Error).message);
     }
 
     res.send({

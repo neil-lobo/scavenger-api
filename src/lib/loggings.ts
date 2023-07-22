@@ -71,4 +71,6 @@ class Logger {
     }
 }
 
-export const logger = new Logger(Number(process.env.LOG_LEVEL ?? 2) as Level);
+export const logger = new Logger(
+    Number(process.env.LOG_LEVEL ?? Level.INFO) as Level
+);

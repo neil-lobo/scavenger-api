@@ -7,6 +7,7 @@ import { sendConfirmationEmail } from "../lib/mail.js";
 import bcrypt from "bcrypt";
 import { z } from "zod";
 import { validateBody } from "../lib/middleware/validate.js";
+import { logger } from "../lib/loggings.js";
 
 const router = Router();
 // const passwordExpr = /^[\w!@#$%^&*() ]+$/;
@@ -42,7 +43,7 @@ router.post("/signup", middleware, async (req: Request, res: Response) => {
             ]
         );
     } catch (err: any) {
-        console.log(err);
+        logger.error("SignUp", (err as Error).message);
         if (err.code === "ER_DUP_ENTRY") {
             return res.status(400).json({
                 ...BAD_REQUEST,
@@ -58,7 +59,7 @@ router.post("/signup", middleware, async (req: Request, res: Response) => {
     try {
         await sendConfirmationEmail(req.body.email.toLowerCase(), code);
     } catch (err: any) {
-        console.log(err);
+        logger.error("SendConfirmEmail", (err as Error).message);
     }
 
     res.status(200).send();

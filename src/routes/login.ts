@@ -12,6 +12,7 @@ import { config } from "../lib/config.js";
 import { User } from "../lib/middleware/auths.js";
 import { z } from "zod";
 import { validateBody } from "../lib/middleware/validate.js";
+import { logger } from "../lib/loggings.js";
 
 const router = Router();
 
@@ -54,6 +55,7 @@ router.post("/login", middleware, async (req: Request, res: Response) => {
         }
     } catch (err: any) {
         console.log(err);
+        logger.error("Login", (err as Error).message);
         return res.status(500).json({
             ...INTERNAL_SERVER_ERROR,
         });
@@ -79,7 +81,7 @@ router.post("/login", middleware, async (req: Request, res: Response) => {
             config.jwt.secret
         );
     } catch (err: any) {
-        console.log(err);
+        logger.error("SignJWT", (err as Error).message);
         return res.status(500).json({
             ...INTERNAL_SERVER_ERROR,
         });
