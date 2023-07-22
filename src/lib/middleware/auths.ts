@@ -6,7 +6,7 @@ import { config } from "../config.js";
 import { logger } from "../loggings.js";
 
 const User = z.object({
-    id: z.string(),
+    id: z.number(),
     email: z.string(),
     firstName: z.string(),
     lastName: z.string(),

@@ -10,6 +10,7 @@ import {
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config } from "../lib/config.js";
+import { User } from "../lib/middleware/auths.js";
 
 const router = Router();
 
@@ -73,7 +74,7 @@ router.post("/login", middleware, async (req: Request, res: Response) => {
         });
     }
 
-    if (!user.EMAIL_CONFIRMED) {
+    if (user.EMAIL_CONFIRMED === 0) {
         return res.status(403).json({
             ...FORBIDDEN,
             message: "Email not confirmed",
@@ -82,7 +83,16 @@ router.post("/login", middleware, async (req: Request, res: Response) => {
 
     // create jwt
     try {
-        token = jwt.sign(user, config.jwt.secret);
+        token = jwt.sign(
+            {
+                email: user.EMAIL,
+                id: user.ID,
+                firstName: user.F_NAME,
+                lastName: user.L_NAME,
+                confirmedEmail: user.EMAIL_CONFIRMED ? true : false,
+            } as User,
+            config.jwt.secret
+        );
     } catch (err: any) {
         console.log(err);
         return res.status(500).json({
