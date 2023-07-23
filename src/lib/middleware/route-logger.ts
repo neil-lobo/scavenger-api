@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { logger } from "../loggings.js";
+import { logger } from "../../index.js";
 
 export function logRoute(req: Request, res: Response, next: NextFunction) {
     let path = req.path;

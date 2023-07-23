@@ -7,7 +7,7 @@ import { sendConfirmationEmail } from "../lib/mail.js";
 import bcrypt from "bcrypt";
 import { z } from "zod";
 import { validateBody } from "../lib/middleware/validate.js";
-import { logger } from "../lib/loggings.js";
+import { logger } from "../index.js";
 
 const router = Router();
 // const passwordExpr = /^[\w!@#$%^&*() ]+$/;

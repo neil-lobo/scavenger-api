@@ -1,13 +1,13 @@
 import chalk from "chalk";
 
-enum Level {
+export enum Level {
     ERROR = 0,
     WARN = 1,
     INFO = 2,
     DEBUG = 3,
 }
 
-class Logger {
+export class Logger {
     private level: Level;
 
     constructor(initLevel: Level = Level.INFO) {
@@ -70,7 +70,3 @@ class Logger {
         }
     }
 }
-
-export const logger = new Logger(
-    Number(process.env.LOG_LEVEL ?? Level.INFO) as Level
-);

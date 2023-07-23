@@ -3,7 +3,7 @@ import { UNAUTHORIZED } from "../http-status.js";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { config } from "../config.js";
-import { logger } from "../loggings.js";
+import { logger } from "../../index.js";
 
 const User = z.object({
     id: z.number(),

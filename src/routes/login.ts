@@ -12,7 +12,7 @@ import { config } from "../lib/config.js";
 import { User } from "../lib/middleware/auths.js";
 import { z } from "zod";
 import { validateBody } from "../lib/middleware/validate.js";
-import { logger } from "../lib/loggings.js";
+import { logger } from "../index.js";
 
 const router = Router();
 
