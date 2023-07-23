@@ -9,6 +9,7 @@ import { logRoute } from "../lib/middleware/route-logger.js";
 import { AuthedRequest, auth } from "../lib/middleware/auths.js";
 import { db } from "../lib/db.js";
 import { logger } from "../index.js";
+import { CodeRedeemEvent, events } from "../lib/events.js";
 
 const router = Router();
 
@@ -65,6 +66,13 @@ router.post(
                     ...INTERNAL_SERVER_ERROR,
                 });
             }
+        }
+
+        if (req.auth) {
+            events.emit("code-redeem", {
+                code,
+                user: req.auth.user,
+            } satisfies CodeRedeemEvent);
         }
 
         res.status(200).send();
