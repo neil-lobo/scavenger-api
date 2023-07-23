@@ -54,7 +54,6 @@ router.post("/login", middleware, async (req: Request, res: Response) => {
             });
         }
     } catch (err: any) {
-        console.log(err);
         logger.error("Login", (err as Error).message);
         return res.status(500).json({
             ...INTERNAL_SERVER_ERROR,
