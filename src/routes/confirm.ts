@@ -15,12 +15,12 @@ const bodySchema = z.object({
 
 const middlware = [logRoute, json(), validateBody(bodySchema)];
 
-router.get("/confirm", middlware, async (req: Request, res: Response) => {
+router.post("/confirm", middlware, async (req: Request, res: Response) => {
     let data;
     try {
         data = await db.pool.query(
             "SELECT * FROM MAC_SH_DEV.USERS WHERE CONFIRMATION_CODE = ?",
-            [req.query.code]
+            [req.body.code]
         );
     } catch (err: any) {
         logger.error("ConfirmEmailCode", (err as Error).message);
